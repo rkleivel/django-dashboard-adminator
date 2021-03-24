@@ -16,14 +16,17 @@ from .models import Rawfile
 def index(request):
     return render(request, "index.html")
 
+@login_required(login_url="/login/")
 class RawfilesView(generic.ListView):
     model = Rawfile
     template_name = 'rawfiles.html'
 
+@login_required(login_url="/login/")
 class RawfilesmapView(generic.ListView):
     model = Rawfile
     template_name = 'leaflet-maps.html'
 
+@login_required(login_url="/login/")
 def rawfilesmap2(request):
     #mydata = [{'lat': 60.55, 'lon': 5.20}]
     mydata = list(Rawfile.objects.values())
