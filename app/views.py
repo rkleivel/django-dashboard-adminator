@@ -6,12 +6,32 @@ Copyright (c) 2019 - present AppSeed.us
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template import loader
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django import template
+
+from django.views import generic
+from .models import Rawfile
 
 @login_required(login_url="/login/")
 def index(request):
     return render(request, "index.html")
+
+#@login_required(login_url="/login/") Kan ikkje bruka decorator på Class(?)
+class RawfilesView(generic.ListView):
+    model = Rawfile
+    template_name = 'rawfiles.html'
+
+#@login_required(login_url="/login/") Kan ikkje bruka decorator på Class(?)
+class RawfilesmapView(generic.ListView):
+    model = Rawfile
+    template_name = 'leaflet-maps.html'
+
+@login_required(login_url="/login/")
+def rawfilesmap2(request):
+    #mydata = [{'lat': 60.55, 'lon': 5.20}]
+    mydata = list(Rawfile.objects.values())
+
+    return(render(request,'leaflet-maps.html', context={"mydata": mydata}))
 
 @login_required(login_url="/login/")
 def pages(request):
