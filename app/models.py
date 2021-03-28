@@ -31,8 +31,9 @@ class Rawfile(models.Model):
     country_loc = models.CharField(max_length=2000, null=True)
     county = models.CharField(max_length=2000, null=True)
     municipality = models.CharField(max_length=2000, null=True)
-    UTCtime = models.IntegerField(null=True)
-    localTime = models.IntegerField(null=True)
+    GMTtime = models.IntegerField(null=True)
+    GMTtimeStr = models.CharField(max_length=40, null=True)
+    localTimeStr = models.CharField(max_length=40, null=True)
     trail = models.CharField(max_length=2000, null=True)
     def __str__(self):
         return self.file_name
