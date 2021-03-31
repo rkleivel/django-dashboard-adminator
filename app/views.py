@@ -29,9 +29,15 @@ class RawfilesmapView(generic.ListView):
 @login_required(login_url="/login/")
 def rawfilesmap2(request):
     #mydata = [{'lat': 60.55, 'lon': 5.20}]
-    mydata = list(Rawfile.objects.values())
+    #mydata = list(Rawfile.objects.values()) #alle data frå app_rawfile
+    mydata = list(Rawfile.objects.values('id', 'fileName', 'vidLength', 'mtimeStr', 'localTimeStr', 'tagLocationLat', 'tagLocationLon').filter(tagLocationLat__isnull=False).filter(GPSfreq__gte=10)) #alle data where tagLocationLat not null
+    reddata = list(Rawfile.objects.values('id', 'fileName', 'vidLength', 'mtimeStr', 'localTimeStr', 'tagLocationLat', 'tagLocationLon').filter(tagLocationLat__isnull=False).exclude(GPSfreq__gte=10)) #alle data where tagLocationLat not null
+    for idx, x in enumerate(mydata):
+        mydata[idx]['vidLengthStr'] = str(int(mydata[idx]['vidLength']//60)).zfill(2) + ":" + str(int(mydata[idx]['vidLength']%60)).zfill(2)
+    for idx, x in enumerate(reddata):
+        reddata[idx]['vidLengthStr'] = str(int(reddata[idx]['vidLength']//60)).zfill(2) + ":" + str(int(reddata[idx]['vidLength']%60)).zfill(2)
 
-    return(render(request,'leaflet-maps.html', context={"mydata": mydata}))
+    return(render(request,'leaflet-maps.html', context={"mydata": mydata, "reddata": reddata}))
 
 @login_required(login_url="/login/")
 def pages(request):

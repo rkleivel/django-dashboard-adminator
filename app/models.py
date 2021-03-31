@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 class Rawfile(models.Model):
     name = models.CharField(max_length=2000, null=True)
     mtime = models.IntegerField(null=True)
+    mtimeStr = models.CharField(max_length=40, null=True)
     vidLength = models.FloatField(null=True)
     vidNumFrames = models.IntegerField(null=True)
     camFirmware = models.CharField(max_length=100, null=True)
@@ -35,5 +36,8 @@ class Rawfile(models.Model):
     GMTtimeStr = models.CharField(max_length=40, null=True)
     localTimeStr = models.CharField(max_length=40, null=True)
     trail = models.CharField(max_length=2000, null=True)
+    FPS = models.CharField(max_length=40, null=True)
+    hash = models.IntegerField(null=True)
+    GPSfreq = models.FloatField(null=True)
     def __str__(self):
-        return self.file_name
+        return self.name
