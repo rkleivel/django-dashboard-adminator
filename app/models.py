@@ -28,8 +28,11 @@ class Rawfile(models.Model):
     lastGoodGPSLon = models.FloatField(null=True)
     tagLocationLat = models.FloatField(null=True) # default=60.53
     tagLocationLon = models.FloatField(null=True) # default=5.14
+    unsureLat = models.FloatField(null=True) 
+    unsureLon = models.FloatField(null=True) 
     timeZone = models.CharField(max_length=100, null=True)
     timeOffset = models.IntegerField(null=True)
+    continent = models.CharField(max_length=2000, null=True)
     country_int = models.CharField(max_length=2000, null=True)
     country_loc = models.CharField(max_length=2000, null=True)
     county = models.CharField(max_length=2000, null=True)
