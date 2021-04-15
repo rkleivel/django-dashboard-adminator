@@ -24,26 +24,8 @@
         </div>
         </div>
     </div>
-    {% load staticfiles %}
-    <video
-        id="my-video"
-        class="video-js"
-        controls
-        preload="none"
-        width="640"
-        height="264"
-        poster="/H8-GPSvsTime/010_rawdata/mpv-shot0007.jpg"
-        data-setup="{}"
-    >
-        <source src="{% static "/tmp/GL043389.LRV" %}" type="video/mp4" />
-        <p class="vjs-no-js">
-        To view this video please enable JavaScript, and consider upgrading to a
-        web browser that
-        <a href="https://videojs.com/html5-video-support/" target="_blank"
-            >supports HTML5 video</a
-        >
-        </p>
-    </video>
+    
+
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
@@ -53,61 +35,18 @@
    crossorigin="">
 </script>
 <script src="https://vjs.zencdn.net/7.11.4/video.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 
 {{ mydata|json_script:"mydata" }}
 {{ reddata|json_script:"reddata" }}
 {{ greendata|json_script:"greendata" }}
+{{ traildata|json_script:"traildata" }}
 
 <script>
-    var mymap = L.map('mapid').setView([60.53, 5.14], 13);
-    
-    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        maxZoom: 18,
-        id: 'mapbox/streets-v11',
-        tileSize: 512,
-        zoomOffset: -1,
-        accessToken: 'pk.eyJ1IjoicmtsZWl2ZWwiLCJhIjoiY2ttbjdtNzhkMGV1cDJucGVkbWptZW40ciJ9.wy0hOi5vNPZKbembRjqI0g'
-    }).addTo(mymap);
-    
-    //var marker1 = L.marker([60.53, 5.14]).addTo(mymap);
-    //var marker2 = L.marker([60.54, 5.15]).addTo(mymap);
-    const mydata = JSON.parse(document.getElementById('mydata').textContent);
-    const reddata = JSON.parse(document.getElementById('reddata').textContent);
-    const greendata = JSON.parse(document.getElementById('greendata').textContent);
-    //var pinStart = Array()
-    //var pinEnd = Array()
-    var pinLocation = Array()
-    var redCircle = Array()
-    var greenCircle = Array()
-    function setMarker(item, index) {
-        //pin[index] = L.marker([item.lat, item.lon]).addTo(mymap).bindPopup(item.file_name);
-        pinLocation[index] = L.circle([item.firstGoodGPSLat, item.firstGoodGPSLon], {color: 'blue', radius: 25})
-            .addTo(mymap)
-            .bindTooltip(item.fileName + "<br>" + item.vidRecNumSeqNum +  "<br>" + item.mtimeStr + "<br>"  + item.localTimeStr + "<br>" + item.vidLengthStr)
-            .bindPopup('mpv "' + item.fullPath + '"');
-        //pinLocation[index] = L.marker([item.tagLocationLat, item.tagLocationLon]).addTo(mymap).bindPopup(item.fileName + "<br>" + item.localTimeStr);
-        //pinEnd[index] = L.circle([item.lastGoodGPSLat, item.lastGoodGPSLon], {color: 'red', radius: 15}).addTo(mymap).bindPopup(item.name);
-        //pin2[index] = L.circle([JSON.parse(item["tagLocation"])["lat"], JSON.parse(item["tagLocation"])["lon"]], {color: 'blue', radius: 20}).addTo(mymap).bindPopup(item.file_name);
-    }
-    function setRedMarker(item, index) {
-        redCircle[index] = L.circle([item.tagLocationLat, item.tagLocationLon], {color: 'red', radius: 25})
-            .addTo(mymap)
-            .bindTooltip(item.fileName + "<br>" + item.vidRecNumSeqNum +  "<br>" + item.mtimeStr + "<br>" + item.localTimeStr + "<br>" + item.vidLengthStr)
-            .bindPopup('mpv "' + item.fullPath + '"');
-    }
-    function setGreenMarker(item, index) {
-        greenCircle[index] = L.circle([item.firstGoodGPSLat, item.firstGoodGPSLon], {color: 'green', radius: 25})
-            .addTo(mymap)
-            .bindTooltip(item.fileName + "<br>" + item.vidRecNumSeqNum +  "<br>" + item.mtimeStr + "<br>" + item.localTimeStr + "<br>" + item.vidLengthStr)
-            .bindPopup('mpv "' + item.fullPath + '"');
-    }
-    mydata.forEach(setMarker);
-    reddata.forEach(setRedMarker);
-    greendata.forEach(setGreenMarker);
 
-    //var marker3 = L.marker([mydata.lat, mydata.lon]).addTo(mymap).bindPopup("GH010345");
 </script>   
-    
+
+{% load static %}
+<script src="{% static 'app/stow.js' %}"></script>
 
 {% endblock javascripts %}
