@@ -12,6 +12,8 @@ from django import template
 from django.views import generic
 from .models import Rawfile
 
+import json
+
 @login_required(login_url="/login/")
 def index(request):
     return render(request, "index.html")
@@ -43,6 +45,12 @@ def rawfilesmap2(request):
         .filter(tagLocationLat__isnull=False)
         .exclude(GPSfreq__gt=8)
         .filter(vidLength__gt=10)) #alle data where tagLocationLat not null
+    traildata = list(Rawfile.objects.values('id', 'trail')
+        .filter(firstGoodGPSLat__isnull=False)
+        .filter(GPSfreq__gte=8)
+        .filter(vidLength__gt=10)
+        .exclude(trail__isnull=True)
+        .filter(municipality__exact='Bergen'))
     for idx, x in enumerate(mydata):
         mydata[idx]['vidLengthStr'] = str(int(mydata[idx]['vidLength']//60)).zfill(2) + ":" + str(int(mydata[idx]['vidLength']%60)).zfill(2)
         mydata[idx]['vidRecNumSeqNum'] = str(mydata[idx]['recNum']).zfill(4) + "-" + str(mydata[idx]['seqNum']).zfill(2)
@@ -52,8 +60,10 @@ def rawfilesmap2(request):
     for idx, x in enumerate(reddata):
         reddata[idx]['vidLengthStr'] = str(int(reddata[idx]['vidLength']//60)).zfill(2) + ":" + str(int(reddata[idx]['vidLength']%60)).zfill(2)
         reddata[idx]['vidRecNumSeqNum'] = str(reddata[idx]['recNum']).zfill(4) + "-" + str(reddata[idx]['seqNum']).zfill(2)
-
-    return(render(request,'leaflet-maps.html', context={"mydata": mydata, "reddata": reddata, "greendata": greendata}))
+    for idx, x in enumerate(traildata):
+        if(bool(traildata[idx]['trail'])):
+            traildata[idx]['trail'] = json.loads(traildata[idx]['trail'])
+    return(render(request,'leaflet-maps.html', context={"mydata": mydata, "reddata": reddata, "greendata": greendata, "traildata": traildata}))
 
 @login_required(login_url="/login/")
 def pages(request):
