@@ -45,3 +45,17 @@ class Rawfile(models.Model):
     hash = models.IntegerField(null=True)    
     def __str__(self):
         return self.name
+
+class GPSdata(models.Model):
+    rawfileKey = models.ForeignKey(Rawfile, on_delete=models.CASCADE) #https://docs.djangoproject.com/en/3.1/intro/tutorial02/
+    Milliseconds = models.IntegerField()
+    Latitude = models.FloatField()
+    Longitude = models.FloatField()
+    Altitude = models.FloatField()
+    Speed = models.FloatField()
+    Speed3D = models.FloatField()
+    TS = models.IntegerField()
+    GpsAccuracy = models.IntegerField()
+    GpsFix = models.IntegerField()
+    #UTCtime = models.CharField(max_length=40, null=True)
+
