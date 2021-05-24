@@ -42,7 +42,9 @@ class Rawfile(models.Model):
     localTimeStr = models.CharField(max_length=40, null=True)
     GPSfreq = models.FloatField(null=True)
     trail = models.CharField(max_length=2000, null=True)
-    hash = models.IntegerField(null=True)    
+    hash = models.IntegerField(null=True)
+    view = models.CharField(max_length=10, null=True)
+    vehicle = models.CharField(max_length=20, null=True)  
     def __str__(self):
         return self.name
 
@@ -59,3 +61,12 @@ class GPSdata(models.Model):
     GpsFix = models.IntegerField()
     #UTCtime = models.CharField(max_length=40, null=True)
 
+class Rawfile_logger(models.Model):
+    rawfileKey = models.ForeignKey(Rawfile, on_delete=models.CASCADE) #https://docs.djangoproject.com/en/3.1/intro/tutorial02/
+    datetime = models.CharField(max_length=30, null=True)
+    textlog = models.TextField()
+    overpassServername = models.CharField(max_length=200, null=True)
+    overpassGenerator = models.CharField(max_length=200, null=True)
+    overpassVersion = models.CharField(max_length=10, null=True)
+    overpassTimstampOSMBase = models.CharField(max_length=24, null=True)
+    overpassTimstampAreasBase = models.CharField(max_length=24, null=True)
