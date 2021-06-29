@@ -38,19 +38,19 @@ select id, name, fileFullName, vidLength, camFirmware, firstGoodGPSLat,  tagLoca
 
 select *, (1619710535707000 - TS) from app_gpsdata where ABS((1619710535707000 - TS)) < 55000
 
-select * from app_gpsdata where rawfileKey_id = 8898
+select * from app_gpsdata where rawfileKey_id = 14856
 
 delete from app_gpsdata where rawfileKey_id not in (select id from app_rawfile)
 
 delete from app_rawfile_logger where rawfileKey_id not in (select id from app_rawfile)
 
-select * from app_rawfile_logger where textlog like "%error%"
+select * from app_rawfile_logger where textlog like "%utf%"
 
 select * from app_rawfile_logger where textlog like ("%" || CHAR(10) || "%")
 
 select * from app_rawfile where gpsfreq < 17 and id > 9240 and id not in (select rawfilekey_id from app_rawfile_logger where textlog like ("%" || CHAR(10) || "%"))
 
-
+select DISTINCT textlog from app_rawfile_logger where textlog like ("%" || CHAR(10) || "%")
 
 vacuum
 
